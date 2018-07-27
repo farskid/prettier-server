@@ -1,0 +1,44 @@
+<textarea id="js-pre">
+
+</textarea>
+<pre id="js-result"></pre>
+<button id="js-submit">Format</button>
+
+<style>
+  textarea {
+    width: 400px;
+    height: 400px;
+    display: block;
+  }
+</style>
+
+<script>
+  const $pre = document.getElementById('js-pre');
+  const $result = document.getElementById('js-result');
+  const $submit = document.getElementById('js-submit');
+
+  $submit.onclick = function () {
+    format($pre.value)
+      .then(x => {
+        console.log(x);
+        $result.innerText = x.result;
+      })
+      .catch(console.error)
+  }
+
+  function format(code) {
+    return window.fetch('http://localhost:3000/format', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        code,
+        options: {
+          semi: true
+        }
+      })
+    })
+      .then(x => x.json())
+  }
+</script>
